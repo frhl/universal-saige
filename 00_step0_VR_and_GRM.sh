@@ -38,8 +38,7 @@ subset_variants(){
     fi
 
     if [[ -n "$SAMPLEIDS" ]]; then
-      #./resources/plink --merge-list /tmp/merge_list.txt --make-bed --out /tmp/merged --keep <(awk '{print $1, $1}' "$SAMPLEIDS")
-      ./resources/plink --merge-list /tmp/merge_list.txt --make-bed --out /tmp/merged --keep "$SAMPLEIDS"
+      ./resources/plink --merge-list /tmp/merge_list.txt --make-bed --out /tmp/merged --keep <(awk '{print $1, $1}' "$SAMPLEIDS")
     else
       ./resources/plink --merge-list /tmp/merge_list.txt --make-bed --out /tmp/merged 
     fi
