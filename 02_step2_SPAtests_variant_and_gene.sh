@@ -252,6 +252,8 @@ else
   exit 1
 fi
 
+ls ${VCF}
+
 cmd="step2_SPAtests.R \
         --bedFile=$BED \
         --bimFile=$BIM \
@@ -259,6 +261,7 @@ cmd="step2_SPAtests.R \
         --groupFile=$GROUPFILE \
         --annotation_in_groupTest=$ANNOTATIONS \
         --vcfFile=${VCF} \
+        --vcfFileIndex="${VCF}.csi"\
         --vcfField="DS" \
         --chrom="$CHR" \
         --minMAF=0 \
