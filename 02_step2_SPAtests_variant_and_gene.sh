@@ -228,7 +228,7 @@ WD=$( pwd )
 
 if [[ "$TESTTYPE" = "variant" ]]; then
   echo "variant testing"
-  min_mac="1"
+  min_mac="10"
   GROUPFILE=""
 else
   echo "gene testing"
@@ -246,7 +246,7 @@ elif [[ ${VCF} != "" ]]; then
   BED=""
   BIM=""
   FAM="" 
-  VCF="${VCF}"
+  VCF="${HOME}/${VCF}"
 else
   echo "No plink or vcf found!"
   exit 1
