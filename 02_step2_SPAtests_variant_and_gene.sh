@@ -273,7 +273,8 @@ cmd="step2_SPAtests.R \
         --subSampleFile=${SUBSAMPLES} \
         --LOCO=FALSE \
         --is_Firth_beta=TRUE \
-        --pCutoffforFirth=0.95 \
+        --SPAcutoff 0 \
+        --pCutoffforFirth=0.10 \
         --is_output_moreDetails=TRUE \
         --is_fastTest=TRUE \
         --is_output_markerList_in_groupTest=TRUE \
