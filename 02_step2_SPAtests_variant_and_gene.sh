@@ -228,7 +228,7 @@ WD=$( pwd )
 
 if [[ "$TESTTYPE" = "variant" ]]; then
   echo "variant testing"
-  min_mac="10"
+  min_mac="5"
   GROUPFILE=""
 else
   echo "gene testing"
@@ -273,7 +273,7 @@ cmd="step2_SPAtests.R \
         --subSampleFile=${SUBSAMPLES} \
         --LOCO=FALSE \
         --is_Firth_beta=TRUE \
-        --pCutoffforFirth=0.1 \
+        --pCutoffforFirth=0.95 \
         --is_output_moreDetails=TRUE \
         --is_fastTest=TRUE \
         --is_output_markerList_in_groupTest=TRUE \
