@@ -280,8 +280,8 @@ cmd="step2_SPAtests.R \
         --is_output_markerList_in_groupTest=TRUE \
         --is_single_in_groupTest=TRUE \
         --maxMAF_in_groupTest=0.0001,0.001,0.01 \
-        --SAIGEOutputFile=${HOME}/${OUT}.txt \
-        --dosage_zerod_MAC_cutoff=0
+        --SAIGEOutputFile=${HOME}/${OUT}.txt
     "
 
+#--dosage_zerod_MAC_cutoff=0
 run_container
