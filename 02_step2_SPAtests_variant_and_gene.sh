@@ -232,7 +232,7 @@ if [[ "$TESTTYPE" = "variant" ]]; then
   GROUPFILE=""
 else
   echo "gene testing"
-  min_mac="0.00001"
+  min_mac="0.5"
   GROUPFILE="${HOME}/${GROUPFILE}"
 fi
 
