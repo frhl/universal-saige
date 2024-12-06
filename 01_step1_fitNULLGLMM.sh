@@ -16,6 +16,7 @@ PHENOFILE=""
 PHENOCOL=""
 COVARCOLLIST=""
 CATEGCOVARCOLLIST=""
+FORCE_NO_INT=false
 WD=$(pwd)
 
 while [[ $# -gt 0 ]]; do
@@ -37,6 +38,10 @@ while [[ $# -gt 0 ]]; do
       fi
       shift # past argument
       shift # past value
+      ;;
+    --force-no-int)
+      FORCE_NO_INT=true
+      shift # past argument
       ;;
     -p|--genotypePlink)
       GENOTYPE_PLINK="$2"
@@ -74,10 +79,10 @@ while [[ $# -gt 0 ]]; do
       shift # past value
       ;;
     --sampleIDs)
-      SAMPLEIDS="$2" 
+      SAMPLEIDS="$2"
       shift
       shift
-      ;; 
+      ;;
     -i|--sampleIDCol)
       SAMPLEIDCOL="$2"
       shift # past argument
@@ -104,6 +109,7 @@ while [[ $# -gt 0 ]]; do
     --categCovarColList: comma separated column names of categorical variables to include as fixed effects in the file specified in --phenoFile.
     --sampleIDCol (default: IID): column containing the sample IDs in the phenotype file, which must match the sample IDs in the plink files.
     --sex ('M' or 'F')
+    --force-no-int: if set, inverse normal transformation will not be performed even for quantitative traits.
       "
       shift # past argument
       ;;
@@ -173,6 +179,7 @@ fi
 echo "OUT               = ${OUT}"
 echo "SINGULARITY       = ${SINGULARITY}"
 echo "TRAITTYPE         = ${TRAITTYPE}"
+echo "FORCE_NO_INT      = ${FORCE_NO_INT}"
 echo "PLINK             = ${PLINK_WES}.{bim/bed/fam}"
 echo "SPARSEGRM         = ${SPARSEGRM}"
 echo "SPARSEGRMID       = ${SPARSEGRMID}"
@@ -207,10 +214,14 @@ WD=$( pwd )
 # Get number of threads
 n_threads=$(( $(nproc --all) - 1 ))
 
-# Get inverse-normalize flag if trait_type=="quantitative"
-if [[ ${TRAITTYPE} == "quantitative" ]]; then
+# Get inverse-normalize flag based on trait type and FORCE_NO_INT flag
+if [[ ${TRAITTYPE} == "quantitative" && ${FORCE_NO_INT} == false ]]; then
   echo "Quantitative trait passed to SAIGE, perform IRNT"
   INVNORMALISE=TRUE
+  TOL="0.00001"
+elif [[ ${TRAITTYPE} == "quantitative" && ${FORCE_NO_INT} == true ]]; then
+  echo "Quantitative trait passed to SAIGE, IRNT disabled by force-no-int flag"
+  INVNORMALISE=FALSE
   TOL="0.00001"
 else
   echo "Binary trait passed to SAIGE"
