@@ -14,6 +14,7 @@ VARIANCERATIO=""
 SPARSEGRM=""
 SPARSEGRMID=""
 GROUPFILE=""
+VCFFIELD="DS"  # Default value for vcfField
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -41,7 +42,7 @@ while [[ $# -gt 0 ]]; do
     #   FREEZE_NUMBER="$2"
     #   shift # past argument
     #   shift # past value
-    #   ;;  
+    #   ;;
     -o|--outputPrefix)
       OUT="$2"
       shift # past argument
@@ -75,6 +76,11 @@ while [[ $# -gt 0 ]]; do
       shift # past argument
       shift # past value
       ;;
+    --vcfField)
+      VCFFIELD="$2"
+      shift # past argument
+      shift # past value
+      ;;
     -m|--modelFile)
       MODELFILE="$2"
       shift # past argument
@@ -89,7 +95,7 @@ while [[ $# -gt 0 ]]; do
       GROUPFILE="$2"
       shift # past argument
       shift # past value
-      ;; 
+      ;;
     --annotations)
       ANNOTATIONS="$2"
       shift # past argument
@@ -137,6 +143,8 @@ while [[ $# -gt 0 ]]; do
     -g,--groupFile: required if group test is selected. Filename of the annotation file used for group tests. This must be relative to, and contained within, the current working directory.
     --annotations: required if group test is selected. comma seperated list of annotations to test found in groupfile. Please use
     'pLoF,damaging_missense_or_protein_altering,other_missense_or_protein_altering,synonymous,pLoF:damaging_missense_or_protein_altering,pLoF:damaging_missense_or_protein_altering:other_missense_or_protein_altering:synonymous'
+    --vcfField (default: DS): field in VCF to use for genotypes.
+    --subSampleFile: file with sample IDs to include in analysis.
       "
       shift # past argument
       ;;
@@ -212,6 +220,7 @@ echo "GROUPFILE         = ${GROUPFILE}"
 echo "ANNOTATIONS"      = ${ANNOTATIONS}
 echo "SPARSEGRM         = ${SPARSEGRM}"
 echo "SPARSEGRMID       = ${SPARSEGRMID}"
+echo "VCFFIELD          = ${VCFFIELD}"
 
 # For debugging
 set -exo pipefail
@@ -242,10 +251,10 @@ if [[ ${PLINK} != "" ]]; then
   BIM=${PLINK}".bim"
   FAM=${PLINK}".fam"
   VCF=""
-elif [[ ${VCF} != "" ]]; then 
+elif [[ ${VCF} != "" ]]; then
   BED=""
   BIM=""
-  FAM="" 
+  FAM=""
   VCF="${HOME}/${VCF}"
 else
   echo "No plink or vcf found!"
@@ -262,7 +271,7 @@ cmd="step2_SPAtests.R \
         --annotation_in_groupTest=$ANNOTATIONS \
         --vcfFile=${VCF} \
         --vcfFileIndex="${VCF}.csi"\
-        --vcfField="DS" \
+        --vcfField="${VCFFIELD}" \
         --chrom="$CHR" \
         --minMAF=0 \
         --minMAC=${min_mac} \
